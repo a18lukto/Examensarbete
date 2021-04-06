@@ -23,3 +23,41 @@
     height: 458px;
     width: 500px;
 }
+.OptionMenu {
+    display: block;
+    width: 500px;
+    height: 500px;
+    border: 2px solid black;
+    background-color: green;
+    margin: 2%;
+}
+.OptionButton{
+    border: 1px solid black;
+    margin-top: 1%;
+
+}
+.OptionButtonHeader{
+    margin-top: 1%;
+    text-align: center;
+    font-size: large;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.OptionMainButton{
+    border: 1px solid  black;
+    width: 100%;
+    font-size: large;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.OptionMainDropdown{
+    border: 1px solid turquoise;
+    width: 100%;
+    font-size: large;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.OptionHeader{
+    border-radius: 20%;
+    margin: 1%;
+    text-align: center;
+    font-size: xx-large;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}

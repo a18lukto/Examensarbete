@@ -113,20 +113,19 @@ var cfg = {
 var heatmapLayer = new HeatmapOverlay(cfg);
 var cordsLat = '58.38900';
 var cordsLng = '13.84598';
+
 $("#testbutton").click(function () {
-        console.log("hej");
-        
-    function($("#Landsting"){
-        var opt = $(this).find(":selected");
-        console.log(opt.data("lat"));
-        console.log(opt.data("lng"));
-        var choosenLat = opt.data("lat");
-        var choosenLng = opt.data("lng");
-        cordsLat = choosenLat;
-        cordsLng = choosenLng;
-        console.log(choosenLat, choosenLng);
-    )};
-    });
+console.log("hej");
+    $('#Landsting').ready(function(){
+        console.log("hej2");
+    var choosenLat =$('option:selected',this).clone('lat');
+    var choosenLng =$('selected',this).clone('data-lng');
+    console.log(choosenLat);
+    console.log(choosenLng);
+    cordsLat = choosenLat;
+    cordsLng = choosenLng;
+    });  
+});
 var map = new L.Map('mapOneID', {
   center: new L.LatLng(cordsLat,cordsLng),
   zoom: 9.5,

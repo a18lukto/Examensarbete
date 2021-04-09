@@ -44,7 +44,7 @@
             <!--Folkokning button-->
             <div class="OptionButton">
                 <p class="OptionButtonHeader">Folkökning</p>
-                <select class="OptionMainDropdown" name="Landsting" id="Landsting">
+                <select class="OptionMainDropdown" name="Landsting" id="Landsting1">
                     <option value="" disabled selected hidden>Välj landsting</option>
                     <option value="">Örebro</option>
                     <option value="">Stockholm</option>
@@ -55,7 +55,7 @@
             <!--Folk arbetsloshet button-->
             <div class="OptionButton">
                 <p class="OptionButtonHeader">Folk arbetslöshet</p>
-                <select class="OptionMainDropdown" name="Landsting" id="Landsting">
+                <select class="OptionMainDropdown" name="Landsting" id="Landsting2">
                     <option value="" disabled selected hidden>Välj landsting</option>
                     <option value="">Örebro</option>
                     <option value="">Stockholm</option>
@@ -66,11 +66,11 @@
             <!--folk..... button-->
             <div class="OptionButton">
                 <p class="OptionButtonHeader">Folk....</p>
-                <select class="OptionMainDropdown" name="Landsting" id="Landsting">
+                <select class="OptionMainDropdown" name="Landsting" id="Landsting3">
                     <option value="" disabled selected hidden>Välj landsting</option>
-                    <option value="1" data-lat ="59.2734031" data-lng ="15.215277700000001">Örebro</option>
-                    <option value="59.334415, 18.110103">Stockholm</option>
-                    <option value="57.7087, 11.9751">Göteborg</option>
+                    <option value="59.2734031 15.215277700000001">Örebro</option>
+                    <option value="59.334415 18.110103">Stockholm</option>
+                    <option value="57.7087 11.9751">Göteborg</option>
                 </select>
                 <button id="testbutton" class="OptionMainButton">Rendera karta</button>
             </div>
@@ -114,20 +114,25 @@ var heatmapLayer = new HeatmapOverlay(cfg);
 var cordsLat = '58.38900';
 var cordsLng = '13.84598';
 
+console.log($('#Landsting3'));
+$('#Landsting3').change(function(){
+    console.log("hej2");
+
+    console.log();
+    str = $('#Landsting3').val();
+    var r = str.split(" ");
+    console.log(r);
+    cordsLat = r[0];
+    cordsLng = r[1];
+    }); 
+
 $("#testbutton").click(function () {
 console.log("hej");
-    $('#Landsting').ready(function(){
-        console.log("hej2");
-    var choosenLat =$('option:selected',this).clone('lat');
-    var choosenLng =$('selected',this).clone('data-lng');
-    console.log(choosenLat);
-    console.log(choosenLng);
-    cordsLat = choosenLat;
-    cordsLng = choosenLng;
-    });  
+map.panTo(new L.LatLng(cordsLat, cordsLng));
 });
+
 var map = new L.Map('mapOneID', {
-  center: new L.LatLng(cordsLat,cordsLng),
+  center: new L.LatLng(cordsLat, cordsLng),
   zoom: 9.5,
   layers: [baseLayer, heatmapLayer]
 });

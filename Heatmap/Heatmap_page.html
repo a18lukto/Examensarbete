@@ -13,9 +13,8 @@
     <script type="text/javascript" src="../lib/leaflet/leaflet.js"></script>
     <script type="text/javascript" src="../heatmap.js/build/heatmap.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!--<script type="text/javascript" src="data.json"></script>-->
     <script type="text/javascript" src="Heatmap_page.js"></script>
-    <!-- <script type="text/javascript" src="../Folkmangd.json"></script> -->
+    <script type="text/javascript" src="../Folkmangd.json"></script>
     <script type="text/javascript" src="../heatmap.js/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
     
     
@@ -33,11 +32,18 @@
             <!--Folkmangd button-->
             <div class="OptionButton">
                 <p class="OptionButtonHeader">Folkmängd</p>
-                <select class="OptionMainDropdown" name="Landsting" id="Folkmangd">
+                <select class="OptionMainDropdown" name="Landsting" id="Landsting0">
                     <option value="" disabled selected hidden>Välj landsting</option>
-                    <option value="">Örebro</option>
-                    <option value="">Stockholm</option>
-                    <option value="">Göteborg</option>
+                    <option value="59.334415 18.110103 01">Stockholms län</option>
+                    <option value="60.122902 17.750488 03">Uppsala län</option>
+                    <option value="59.029457 16.764816 04">Södermanlands län</option>
+                    <option value="58.34619 16.15167 05">Östergötlands län</option>
+                    <option value="57.423412 14.34349 06">Jönköpings län</option>
+                    <option value="56.86357 14.578271 07">Kronobergs län</option>
+                    <option value="57.251823 16.308237 08">Kalmar län</option>
+                    <option value="57.598454 18.732735 09">Gotlands län</option>
+                    <option value="56.207233 15.158815 10">Blekinge län</option>
+                    <option value="55.95244 13.482019 12">Skånge län</option>
                 </select>
                 <button class="OptionMainButton">Rendera karta</button>
             </div>
@@ -46,9 +52,16 @@
                 <p class="OptionButtonHeader">Folkökning</p>
                 <select class="OptionMainDropdown" name="Landsting" id="Landsting1">
                     <option value="" disabled selected hidden>Välj landsting</option>
-                    <option value="">Örebro</option>
-                    <option value="">Stockholm</option>
-                    <option value="">Göteborg</option>
+                    <option value="59.334415 18.110103 01">Stockholms län</option>
+                    <option value="60.122902 17.750488 03">Uppsala län</option>
+                    <option value="59.029457 16.764816 04">Södermanlands län</option>
+                    <option value="58.34619 16.15167 05">Östergötlands län</option>
+                    <option value="57.423412 14.34349 06">Jönköpings län</option>
+                    <option value="56.86357 14.578271 07">Kronobergs län</option>
+                    <option value="57.251823 16.308237 08">Kalmar län</option>
+                    <option value="57.598454 18.732735 09">Gotlands län</option>
+                    <option value="56.207233 15.158815 10">Blekinge län</option>
+                    <option value="55.95244 13.482019 12">Skånge län</option>
                 </select>
                 <button class="OptionMainButton">Rendera karta</button>
             </div>
@@ -57,9 +70,16 @@
                 <p class="OptionButtonHeader">Folk arbetslöshet</p>
                 <select class="OptionMainDropdown" name="Landsting" id="Landsting2">
                     <option value="" disabled selected hidden>Välj landsting</option>
-                    <option value="">Örebro</option>
-                    <option value="">Stockholm</option>
-                    <option value="">Göteborg</option>
+                    <option value="59.334415 18.110103 01">Stockholms län</option>
+                    <option value="60.122902 17.750488 03">Uppsala län</option>
+                    <option value="59.029457 16.764816 04">Södermanlands län</option>
+                    <option value="58.34619 16.15167 05">Östergötlands län</option>
+                    <option value="57.423412 14.34349 06">Jönköpings län</option>
+                    <option value="56.86357 14.578271 07">Kronobergs län</option>
+                    <option value="57.251823 16.308237 08">Kalmar län</option>
+                    <option value="57.598454 18.732735 09">Gotlands län</option>
+                    <option value="56.207233 15.158815 10">Blekinge län</option>
+                    <option value="55.95244 13.482019 12">Skånge län</option>
                 </select>
                 <button class="OptionMainButton">Rendera karta</button>
             </div>
@@ -68,9 +88,16 @@
                 <p class="OptionButtonHeader">Folk....</p>
                 <select class="OptionMainDropdown" name="Landsting" id="Landsting3">
                     <option value="" disabled selected hidden>Välj landsting</option>
-                    <option value="59.2734031 15.215277700000001">Örebro</option>
-                    <option value="59.334415 18.110103">Stockholm</option>
-                    <option value="57.7087 11.9751">Göteborg</option>
+                    <option value="59.334415 18.110103 01">Stockholms län</option>
+                    <option value="60.122902 17.750488 03">Uppsala län</option>
+                    <option value="59.029457 16.764816 04">Södermanlands län</option>
+                    <option value="58.34619 16.15167 05">Östergötlands län</option>
+                    <option value="57.423412 14.34349 06">Jönköpings län</option>
+                    <option value="56.86357 14.578271 07">Kronobergs län</option>
+                    <option value="57.251823 16.308237 08">Kalmar län</option>
+                    <option value="57.598454 18.732735 09">Gotlands län</option>
+                    <option value="56.207233 15.158815 10">Blekinge län</option>
+                    <option value="55.95244 13.482019 12">Skånge län</option>
                 </select>
                 <button id="testbutton" class="OptionMainButton">Rendera karta</button>
             </div>
@@ -109,31 +136,71 @@ var cfg = {
   valueField: 'count'
 };
 
-
+var dataSetFiles = ['https://github.com/a18lukto/Examensarbete/blob/main/Folkmangd.json'];
 var heatmapLayer = new HeatmapOverlay(cfg);
 var cordsLat = '58.38900';
 var cordsLng = '13.84598';
-
-console.log($('#Landsting3'));
-$('#Landsting3').change(function(){
+var cordsID = '00';
+console.log($('#Landsting0'));
+$('#Landsting0').change(function(){
     console.log("hej2");
+    console.log();
+    str = $('#Landsting0').val();
+    var r = str.split(" ");
+    console.log(r);
+    cordsLat = r[0];
+    cordsLng = r[1];
+    cordsID = r[2];
+    });
 
+    $('#Landsting1').change(function(){
+    console.log("hej2");
+    console.log();
+    str = $('#Landsting1').val();
+    var r = str.split(" ");
+    console.log(r);
+    cordsLat = r[0];
+    cordsLng = r[1];
+    cordsID = r[2];
+    });
+
+    $('#Landsting2').change(function(){
+    console.log("hej2");
+    console.log();
+    str = $('#Landsting2').val();
+    var r = str.split(" ");
+    console.log(r);
+    cordsLat = r[0];
+    cordsLng = r[1];
+    cordsID = r[2];
+    });
+
+    $('#Landsting3').change(function(){
+    console.log("hej2");
     console.log();
     str = $('#Landsting3').val();
     var r = str.split(" ");
     console.log(r);
     cordsLat = r[0];
     cordsLng = r[1];
-    }); 
+    cordsID = r[2];
+    });
 
-$("#testbutton").click(function () {
-console.log("hej");
+var FolkmangdJsonData = JSON.parse(data);
+$('.OptionMainButton').click(function () {
+console.log(cordsID);
 map.panTo(new L.LatLng(cordsLat, cordsLng));
+    console.log(FolkmangdJsonData[1]);
+   // var i;
+   // for(i = 0; i < key.length; i++){
+   //     console.log(key[i].values);
+   // }
 });
+
 
 var map = new L.Map('mapOneID', {
   center: new L.LatLng(cordsLat, cordsLng),
-  zoom: 9.5,
+  zoom: 8,
   layers: [baseLayer, heatmapLayer]
 });
 

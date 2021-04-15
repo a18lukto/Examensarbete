@@ -136,7 +136,7 @@ var cfg = {
   valueField: 'count'
 };
 
-//var dataSetFiles = ['https://github.com/a18lukto/Examensarbete/blob/main/Folkmangd.json'];
+var dataFiles = ['https://github.com/a18lukto/Examensarbete/blob/main/Folkmangd.json'];
 //Varibles for map creation
 var heatmapLayer = new HeatmapOverlay(cfg);
 var cordsLat = '58.38900';
@@ -190,12 +190,12 @@ $('#Landsting3').change(function(){
 
 
 //Tring new function for json loding
-var values = [];
-function loadJSON(callback) {   
+var folkValues = [];
+function loadJSON(callback, jsonFile) {   
 
 var xobj = new XMLHttpRequest();
 xobj.overrideMimeType("application/json");
-xobj.open('GET', '../Folkmangd.json', true); // Replace 'my_data' with the path to your file
+xobj.open('GET', jsonFile, true); // Replace 'my_data' with the path to your file
 xobj.onreadystatechange = function () {
       if (xobj.readyState == 4 && xobj.status == "200") {
         // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
@@ -211,9 +211,9 @@ loadJSON(function (response) {
 
     // Push ISO-codes to array
     for (var i = 0; i < Object.keys(json).length; i++) {
-        values.push(Object.keys(json)[i]);
+        folkValues.push(Object.keys(json)[i]);
     }
-
+});
 //----------------------------------
 
 $('.OptionMainButton').click(function () {
@@ -222,7 +222,7 @@ $.getJSON('../Folkmangd.json', function(data){
     console.log(data);
 });
 map.panTo(new L.LatLng(cordsLat, cordsLng));
-    //console.log(FolkmangdJsonData[1]);
+    console.log(folkValues,"hello");
 });
 
 

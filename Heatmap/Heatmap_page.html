@@ -28,7 +28,7 @@
         </div>
         <!-- Option Menu-->
         <div class="OptionMenu">
-            <p class="OptionHeader">Option Menu</p>
+            <p class="OptionHeader" id="testid">Option Menu</p>
             <!--Folkmangd button-->
             <div class="OptionButton">
                 <p class="OptionButtonHeader">Folkmängd</p>
@@ -190,6 +190,7 @@ $('#Landsting3').change(function(){
 
 
 //Tring new function for json loding
+/*
 var folkValues = [];
 function loadJSON(callback, jsonFile) {   
 
@@ -214,6 +215,30 @@ loadJSON(function (response) {
         folkValues.push(Object.keys(json)[i]);
     }
 });
+*/
+
+var xmlhttp = new XMLHttpRequest();
+var url = "../testfile.json";
+
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        var myArr = JSON.parse(this.responseText);
+        myFunction(myArr);
+    }
+};
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function myFunction(arr) {
+    var out = "";
+    var i;
+    for(i = 0; i < arr.length; i++) {
+        out += '<a href="' + arr[i].url + '">' +
+        arr[i].display + '</a><br>';
+    }
+    document.getElementById("testid").innerHTML = out;
+}
+
 //----------------------------------
 
 $('.OptionMainButton').click(function () {

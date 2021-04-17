@@ -1,4 +1,4 @@
-[{
+{
 	"columns": [{
 		"code": "Region",
 		"text": "region",
@@ -26,7 +26,7 @@
 		"value": "19",
 		"comment": "Fr o m 2007-01-01 minskar Västmanlands län med Heby kommun. Observera att länssiffrorna inte är jämförbara med länssiffrorna bakåt i tiden.\r\n"
 	}],
-	"data": [{
+	"keyValues": [{
 		"key": ["01", "tot", "1968"],
 		"values": ["1427236"]
 	}, {
@@ -3372,4 +3372,4 @@
 		"label": "Folkmängd efter region, ålder och år",
 		"source": "SCB"
 	}]
-}]
+}

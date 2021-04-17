@@ -141,7 +141,6 @@ var cfg = {
   valueField: 'count'
 };
 
-var dataFiles = ['https://github.com/a18lukto/Examensarbete/blob/main/Folkmangd.json'];
 //Varibles for map creation
 var heatmapLayer = new HeatmapOverlay(cfg);
 var cordsLat = '58.38900';
@@ -195,63 +194,28 @@ $('#Landsting3').change(function(){
 
 
 //Tring new function for json loding
-/*
-var folkValues = [];
-function loadJSON(callback, jsonFile) {   
+https://github.com/a18lukto/Examensarbete/blob/6bbc6fabf0dd6fe55e953fb6fbd24e2e51a04709/Folkmangd.json
 
-var xobj = new XMLHttpRequest();
-xobj.overrideMimeType("application/json");
-xobj.open('GET', jsonFile, true); // Replace 'my_data' with the path to your file
-xobj.onreadystatechange = function () {
-      if (xobj.readyState == 4 && xobj.status == "200") {
-        // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-        callback(xobj.responseText);
-      }
-};
-xobj.send(null);  
+var staticUrl ='https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Folkmangd.json';
+
+$.getJSON(staticUrl, function(data){
+console.log(data);
+for (i = 0; i < data.length; i=i +1){
+    console.log(data.keyValues);
+    console.log(data[i]);
 }
-
-loadJSON(function (response) {
-    // Parse JSON string to JSON object
-    var json = JSON.parse(response);
-
-    // Push ISO-codes to array
-    for (var i = 0; i < Object.keys(json).length; i++) {
-        folkValues.push(Object.keys(json)[i]);
-    }
 });
-*/
-var xmlhttp = new XMLHttpRequest();
-var url = "https://github.com/a18lukto/Examensarbete/blob/f442c7ee03ff6be29218db010339e6f2d7fbddf5/testfile.json";
-
-xmlhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-        var myArr = JSON.parse(this.responseText);
-        myFunction(myArr);
-    }
-};
-xmlhttp.open("GET", url, true);
-xmlhttp.send();
-
-function myFunction(arr) {
-    var out = "";
-    var i;
-    for(i = 0; i < arr.length; i++) {
-        out += '<a href="' + arr[i].url + '">' +
-        arr[i].display + '</a><br>';
-    }
-    document.getElementById("testid").innerHTML = out;
-}
 
 //----------------------------------
 
 $('.OptionMainButton').click(function () {
 console.log(cordsID);
-$.getJSON('../Folkmangd.json', function(data){
-    console.log(data);
-});
+
+function displayAll(data){
+    alert(data);
+}
 map.panTo(new L.LatLng(cordsLat, cordsLng));
-    console.log(folkValues,"hello");
+    
 });
 
 

@@ -1,4 +1,4 @@
-{
+
 	"columns": [{
 		"code": "Region",
 		"text": "region",
@@ -3372,4 +3372,3 @@
 		"label": "Folkmängd efter region, ålder och år",
 		"source": "SCB"
 	}]
-}

@@ -198,11 +198,11 @@ https://github.com/a18lukto/Examensarbete/blob/6bbc6fabf0dd6fe55e953fb6fbd24e2e5
 
 var staticUrl ='https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Folkmangd.json';
 
-$.getJSON(staticUrl, function(data){
-console.log(data,"hej");
-var dataValues = JSON.parse(JSON.stringify(data));
+$.getJSON(staticUrl, function(fejs){
+console.log(fejs,"hej");
+var dataValues = JSON.parse(JSON.stringify(fejs));
 console.log(dataValues,"hej2");
-console.log(dataValues[1],"01")
+console.log(dataValues[0].data[0],"01")
 
 for (i = 0; i < data.length; i=i +1){
     console.log(data[i],"hej2");

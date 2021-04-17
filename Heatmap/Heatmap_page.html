@@ -201,7 +201,7 @@ var staticUrl ='https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Fo
 $.getJSON(staticUrl, function(data){
 console.log(data);
 for (i = 0; i < data.length; i=i +1){
-    console.log(data.keyValues);
+    console.log(data[i].keyValues);
     console.log(data[i]);
 }
 });

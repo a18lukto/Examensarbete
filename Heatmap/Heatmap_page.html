@@ -131,7 +131,6 @@
         function getDataByYear(ChoosenYear) {
             var data = dataValues[0].data;
             var newData = [];
-            console.log(selectedDataset == "Dodsfall")
             newData.push(data.filter(function (x) {
                 return x.key[2] == ChoosenYear;
             }));

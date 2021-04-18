@@ -1,71 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-    crossorigin=""/>
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
     <link rel="stylesheet" type="text/css" href="D3_page.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../lib/leaflet/leaflet.css" />
-    <script parcel type="text/javascript" src="../lib/leaflet/leaflet.js"></script>
-    <script src="D3_page.js"></script>
+    <script type="text/javascript" src="../lib/leaflet/leaflet.js"></script>
+    <script type="text/javascript" src="../heatmap.js/build/heatmap.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../heatmap.js/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
 
 </head>
-<body>
+
+<body onload="init()">
+    <httpProtocol>
+        <customHeaders>
+            <add name="Access-Control-Allow-Origin" value="*" />
+        </customHeaders>
+    </httpProtocol>
     <div id="Main">
         <!-- First map-->
-        <div class="Map"> 
+        <div class="Map">
             <p class="MapHeader">Map Location Based!</p>
             <div class="MapIllustration" id="mapOneID"></div>
         </div>
-        <!-- Second map-->
-        <div class="Map">
-            <p class="MapHeader">Map London Coordinates!</p>
-            <div class="MapIllustration" id="mapTwoID"></div>
+        <!-- Option Menu-->
+        <div class="OptionMenu">
+            <p class="OptionHeader" id="testid">Option Menu</p>
+            <!--Folkmangd button-->
+            <div class="OptionButton">
+                <p class="OptionButtonHeader">Goto Location</p>
+                <select class="OptionMainDropdown" onchange="selectedID = this.value" name="Landsting" id="Landsting">
+
+                </select>
+                <button onclick="gotoPos();">Goto</button>
+            </div>
+            <div class="OptionButton">
+                <p class="OptionButtonHeader">Goto Location</p>
+                <select class="OptionMainDropdown" onchange="selectedDataset = this.value" name="Dataset" id="Dataset">
+
+                </select>
+               <select class="OptionMainDropdown" onchange="selectedYear = this.value" name="LandYear" id="LandYear">
+
+                </select>
+                <button onclick="getData(staticUrl[selectedDataset]);">Hämta data</button>
+                <button onclick="changeHeatMapData();">Render heatMap</button>
+            </div>
         </div>
     </div>
     <script>
-    var mapOne = L.map('mapOneID').fitWorld();
-    var mapTwo = L.map('mapTwoID').setView([51.505, -0.09], 13);
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-        maxZoom: 18,
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox/streets-v11',
-        tileSize: 512,
-        zoomOffset: -1
-    }).addTo(mapTwo);
+        //Getting the json file and doing it useable
+        var staticUrl = {Folkmangd:'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Folkmangd.json',
+                Folktathet: 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Folktathet.json',
+                Skilsmassor: 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Skilsmassor.json',
+                Gifta: 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Gifta.json'
+            };
+        
+        var dataValues;
+        
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-		maxZoom: 18,
-		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-		id: 'mapbox/streets-v11',
-		tileSize: 512,
-		zoomOffset: -1
-	}).addTo(mapOne);
+        var years = [];
+        
+        // Locations data
+        var locations = [
+        { id: "01", namn: "Stockholms län", lat: 59.334415, lng: 18.110103 },
+        { id: "03", namn: "Uppsala län", lat: 60.122902, lng: 17.750488 },
+        { id: "04", namn: "Södermankands län", lat: 59.029457, lng: 16.764816 },
+        { id: "05", namn: "Östergötlands län", lat: 58.34619, lng: 16.15167 },
+        { id: "06", namn: "Jönköping län", lat: 57.423412 , lng: 14.34349 },
+        { id: "07", namn: "Kronobergs län", lat: 56.86357 , lng: 14.578271 },
+        { id: "08", namn: "Kalmar län", lat:  57.251823 , lng: 16.308237 },
+        { id: "09", namn: "Gotlands län", lat: 57.598454 , lng: 18.732735 },
+        { id: "10", namn: "Blekinge län", lat: 56.207233 , lng: 15.158815 },
+        { id: "12", namn: "Skåne län", lat: 55.95244 , lng: 13.482019 },
+        { id: "13", namn: "Hallands län", lat:  57.071297 , lng: 12.717986 },
+        { id: "14", namn: "Västra Götalands län", lat: 58.253223, lng: 12.244518 },
+        { id: "17", namn: "Värmlands län", lat: 59.69761 , lng:  13.069618},
+        { id: "18", namn: "Örebro län", lat: 59.294216  , lng: 15.041704 },
+        { id: "19", namn: "Västmanlands län", lat: 59.781254 , lng: 16.134008 },
+        { id: "20", namn: "Dalarnas län", lat: 60.782745 , lng:  14.769239 },
+        { id: "21", namn: "Gävleborgs län", lat: 61.345898 , lng: 16.73273 },
+        { id: "22", namn: "Västernorrlands län", lat: 62.924004 , lng: 17.836418 },
+        { id: "23", namn: "Jämtlands län", lat: 63.353344 , lng: 14.7706175 },
+        { id: "24", namn: "Västerbottens län", lat: 64.38316 , lng:  19.472322 },
+        { id: "25", namn: "Norrbottens län", lat:  66.432686 , lng: 22.301443 },
+        
+        ];
+        var selectedDataset = "Folktathet";
+        var selectedID;
+        var selectedYear = "2020";
+        //Data used for heatmap
+        var testData = {
+            max: 1000000,
+            data: []
+        };
 
-	function onLocationFound(e) {
-		var radius = e.accuracy / 2;
+        //This will add data from the json and change the map to fit according to what data you want to use
+        function changeHeatMapData() {
+            var dataByYear = getDataByYear(selectedYear);
+            testData.data = [];
+            dataByYear[0].forEach(item => {
+                var temp2 = [];
+                var temp2 = locations.filter(location => {
+                    return item.key[0] == location.id;
+                })
 
-		L.marker(e.latlng).addTo(mapOne)
-			.bindPopup("You are within " + radius + " meters from this point").openPopup();
+                if(temp2.length != 0){
+                console.log(temp2)
+                testData.data.push({
+                    lat: temp2[0].lat,
+                    lng: temp2[0].lng,
+                    count: (item.values[0]/100000)
+                });
+                }
+            })
+            heatmapLayer.setData(testData);
+        }
 
-		L.circle(e.latlng, radius).addTo(mapOne);
-	}
+        //Fetching data from json file which have the right year
+        function getDataByYear(ChoosenYear) {
+            var data = dataValues[0].data;
+            var newData = [];
+            newData.push(data.filter(function (x) {
+                return x.key[2] == ChoosenYear;
+            }));
+            return newData;
+        }
 
-	function onLocationError(e) {
-		alert(e.message);
-	}
+        //Changes the position on the map according to choosen location
+        function gotoPos() {
+            var location = locations.filter(location => location.id == selectedID)[0];
+            //var year = years.filter(year => year.id == selectedYear)[0];
+            map.panTo(new L.LatLng(location.lat, location.lng));
+        }
 
-	mapOne.on('locationfound', onLocationFound);
-	mapOne.on('locationerror', onLocationError);
+        //Creating options to choose from using the locations provided in array above
+        function getOptions() {
+            var string = "<option value='' disabled selected hidden>Välj landsting</option>";
+            locations.forEach(location => string += "<option value='" + location.id + "'>" + location.namn + "</option>")
+            return string;
+        }
+        
+        function getYears() {
+            var data = dataValues[0].data;
+            var myArray = data.map(item => item.key[2]);
+            var unique = myArray.filter((v, i, a) => a.indexOf(v) === i);
+            return unique;
+        }
 
-	mapOne.locate({setView: true, maxZoom: 16});
+        function getDatasetOptions(){
+            var string = "";
+            Object.keys(staticUrl).forEach(key => string += "<option value='" + key + "'>" + key + "</option>")
+            return string;
+        }
+
+        function getYearOptions(years) {
+            var string = "<option value='' disabled selected hidden>Välj år</option>";
+            years.forEach(year => string += "<option value='" + year + "'>" + year + "</option>")
+            return string;
+        }
+        
+        
+
+        //Maplayer
+        /*var baseLayer = L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '...',
+            maxZoom: 18
+        }
+        );*/
+
+        //Config for the heatmap
+        /*var cfg = {
+            "radius": 0.35, // radius should be small ONLY if scaleRadius is true (or small radius is intended) | if scaleRadius is false it will be the constant radius used in pixels
+            "maxOpacity": .5,   //How se trough the heatmap should be
+            "scaleRadius": true, // scales the radius based on map zoom  
+            "useLocalExtrema": true, // if set to false the heatmap uses the global maximum for colorization | if activated: uses the data maximum within the current map boundaries | (there will always be a red spot with useLocalExtremas true)
+            latField: 'lat', // which field name in your data represents the latitude - default "lat"
+            lngField: 'lng', // which field name in your data represents the longitude - default "lng"
+            valueField: 'count' // which field name in your data represents the data value - default "value"
+        };*/
+
+        //Varibles for map creation
+        //var heatmapLayer = new HeatmapOverlay(cfg);
+        var dataValues;
+
+        function getData(url){
+            console.log(url)
+            $.getJSON(url).done(function(response){
+                dataValues = JSON.parse(JSON.stringify(response));
+                document.getElementById('LandYear').innerHTML = getYearOptions(getYears());
+                document.getElementById('Landsting').innerHTML = getOptions();
+                console.log("datarecived");
+            });
+        };
+        //--------------------------------------------
+        function render() {
+            // Create Map with Leaflet.js and set view & zoom.
+            
+            let usedMap = L.map("mapOneID").setView([60.122902, 17.750488], 3);
+            
+            // Create a layer and get the actual map.
+            L.tileLayer(
+            "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                attribution: "D3.js",
+                maxZoom: 12,
+            }
+            // Add to the map-variable.
+            ).addTo(usedMap);
+            // Add Leaflet-SVG to the map.
+            L.svg().addTo(usedMap);
+
+            // Select element "map" and "svg".
+            d3.select("#mapOneID")
+            .select("svg")
+            // Select all elements that will be drawn.
+            .selectAll("dataPoints")
+            // Add dataset as data() parameter.
+            .data(testData)
+            // Create empty elements for the data.
+            .enter()
+            // Append new element "circle" depending on size of the dataset.
+            .append("circle")
+            // Linking coordinates from dataset to D3.js.
+            .attr("cx", function (d) {
+                return usedMap.latLngToLayerPoint([d.lng]).x;
+                console.log(d.lat, d.lng,"i got here")
+            })
+            .attr("cy", function (d) {
+                return usedMap.latLngToLayerPoint([d.lat]).y;
+                console.log(d.lat, d.lng)
+            })
+            // Add radius & style.
+            .attr("r", function (d) {
+                if (d.count <= 5000) {
+                    return "2.8";
+                } else if (d.count <= 20000) {
+                    return "3.1";
+                } else if (d.count <= 750000) {
+                    return "3.4";
+                } else if (d.count <= 125000) {
+                    return "3.7";
+                } else if (d.count <= 200000) {
+                    return "4";
+                } else if (d.count > 250000) {
+                    return "4.3";
+                } else if (d.count <= 300000) {
+                    return "4.6";
+                } else if (d.count <= 400000) {
+                    return "5";
+                }
+            })
+            // Depending on brightness, give according fill-color.
+            .style("fill", function (d) {
+                if (d.count <= 5000) {
+                    return "rgb(0,191,255)";
+                } else if (d.count <= 20000) {
+                    return "rgb(0,255,0)";
+                } else if (d.count <= 750000) {
+                    return "rgb(0,255,0)";
+                } else if (d.count <= 125000) {
+                    return "rgb(255,255,0)";
+                } else if (d.count <= 200000) {
+                    return "rgb(255,255,0)";
+                } else if (d.count > 250000) {
+                    return "rgb(255,0,0)";
+                } else if (d.count <= 300000) {
+                    return "rgb(255,0,0)";
+                } else if (d.count <= 400000) {
+                    return "rgb(255,0,0)";
+                }
+            })
+            .attr("fill-opacity", 0.4);
+            
+            // Update function to render everything and update when the map changes.
+            function Update() {
+            // Select all d3-circles
+            d3.selectAll("circle")
+                // Update the coordniates depending on pan & zoom.
+                .attr("cx", function (d) {
+                return usedMap.latLngToLayerPoint([d.lat, d.lng]).x;
+                })
+                .attr("cy", function (d) {
+                return usedMap.latLngToLayerPoint([d.lat, d.lng]).y;
+                });
+            }
+            // Fire "Update()" when a move has ended on the map.
+            usedMap.on("moveend", Update);
+        }
+
+
+        //--------------------------------------------
+
+        //To create and generate the first map
+       /* var map = new L.Map('mapOneID', {
+            center: new L.LatLng(60.122902, 17.750488),
+            zoom: 8,
+            layers: [baseLayer, heatmapLayer]
+        });*/
+        function init(){
+            getData(staticUrl.Folkmangd);
+            render();
+            document.getElementById('Dataset').innerHTML = getDatasetOptions();
+        }
+
     </script>
 </body>
+
 </html>

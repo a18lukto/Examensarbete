@@ -21,7 +21,7 @@
 
 </head>
 
-<body>
+<body onload="init()">
     <httpProtocol>
         <customHeaders>
             <add name="Access-Control-Allow-Origin" value="*" />
@@ -42,10 +42,16 @@
                 <select class="OptionMainDropdown" onchange="selectedID = this.value" name="Landsting" id="Landsting">
 
                 </select>
-               <!-- <select class="OptionMainDropdown" onchange="selectedYear = this.value" name="LandYear" id="LandYear">
-
-                </select> -->
                 <button onclick="gotoPos();">Goto</button>
+            </div>
+            <div class="OptionButton">
+                <p class="OptionButtonHeader">Goto Location</p>
+                <select class="OptionMainDropdown" onchange="selectedDataset = this.value" name="Dataset" id="Dataset">
+
+                </select>
+               <select class="OptionMainDropdown" onchange="selectedYear = this.value" name="LandYear" id="LandYear">
+
+                </select>
                 <button onclick="changeHeatMapData();">Render heatMap</button>
             </div>
         </div>
@@ -53,20 +59,17 @@
     <script>
 
         //Getting the json file and doing it useable
-        var staticUrl = 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Folkmangd.json';
+        var staticUrl = {Folkmangd:'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Folkmangd.json',
+                Dodsfall: 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Dodsfall.json',
+                Folktathet: 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Folktathet.json',
+                Flyttning: 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Ut_In_flyttning.json'
+            };
+        
         var dataValues;
-        $.getJSON(staticUrl, function (fejs) {
-            dataValues = JSON.parse(JSON.stringify(fejs));
-        });
+        
 
-        var years = [
-            {id: "1", IDyear: "2020"},{id: "2", IDyear: "2019"},{id: "3", IDyear: "2018"},{id: "4", IDyear: "2017"},{id: "5", IDyear: "2016"},{IDyear: "2015"},{IDyear: "2014"},{IDyear: "2013"},{IDyear: "2012"},{IDyear: "2011"},
-            {IDyear: "2011"},{IDyear: "2010"},{IDyear: "2009"},{IDyear: "2008"},{IDyear: "2007"},{IDyear: "2006"},{IDyear: "2005"},{IDyear: "2004"},{IDyear: "2003"},{IDyear: "2002"},
-            {IDyear: "2001"},{IDyear: "2000"},{IDyear: "1999"},{IDyear: "1998"},{IDyear: "1997"},{IDyear: "1996"},{IDyear: "1995"},{IDyear: "1994"},{IDyear: "1993"},{IDyear: "1992"},
-            {IDyear: "1991"},{IDyear: "1990"},{IDyear: "1989"},{IDyear: "1988"},{IDyear: "1987"},{IDyear: "1986"},{IDyear: "1985"},{IDyear: "1984"},{IDyear: "1983"},{IDyear: "1982"},
-            {IDyear: "1981"},{IDyear: "1980"},{IDyear: "1979"},{IDyear: "1978"},{IDyear: "1977"},{IDyear: "1976"},{IDyear: "1975"},{IDyear: "1974"},{IDyear: "1973"},{IDyear: "1972"},
-            {IDyear: "1971"},{IDyear: "1970"},{IDyear: "1969"},{IDyear: "1968"},
-    ];
+        var years = [];
+        
         // Locations data
         var locations = [
         { id: "01", namn: "Stockholms län", lat: 59.334415, lng: 18.110103 },
@@ -95,7 +98,7 @@
 
         var selectedID;
         var year
-        var selectedYear;
+        var selectedYear = "2020";
         //Data used for heatmap
         var testData = {
             max: 1000000,
@@ -104,17 +107,14 @@
 
         //This will add data from the json and change the map to fit according to what data you want to use
         function changeHeatMapData() {
-            var dataByYear = getDataByYear("2020");
+            var dataByYear = getDataByYear(selectedYear);
+            testData.data = [];
             dataByYear[0].forEach(item => {
                 var temp2 = [];
                 var temp2 = locations.filter(location => {
                     return item.key[0] == location.id;
                 })
-               /* var temp3 = [];
-                var temp3 = years.filter(year => {
-                    return item.key[0] == year.id;
-                })
-                */
+
                 if(temp2.length != 0){
                 console.log(temp2)
                 testData.data.push({
@@ -150,15 +150,21 @@
             locations.forEach(location => string += "<option value='" + location.id + "'>" + location.namn + "</option>")
             return string;
         }
-        /*
+        
         function getYears() {
+            var data = dataValues[0].data;
+            var myArray = data.map(item => item.key[2]);
+            var unique = myArray.filter((v, i, a) => a.indexOf(v) === i);
+            return unique;
+        }
+
+        function getYearOptions(years) {
             var string = "<option value='' disabled selected hidden>Välj år</option>";
-            years.forEach(year => string += "<option value='" + years.id + "'>" + years.id + "</option>")
+            years.forEach(year => string += "<option value='" + year + "'>" + year + "</option>")
             return string;
         }
-        */
-        //document.getElementById('LandYear').innerHTML = getYears();
-        document.getElementById('Landsting').innerHTML = getOptions();
+        
+        
 
         //Maplayer
         var baseLayer = L.tileLayer(
@@ -189,7 +195,15 @@
             zoom: 8,
             layers: [baseLayer, heatmapLayer]
         });
-
+        function init(){
+            $.getJSON(staticUrl.Folktathet).done(function(response){
+                dataValues = JSON.parse(JSON.stringify(response));
+                document.getElementById('LandYear').innerHTML = getYearOptions(getYears());
+                console.log(getYears());
+                document.getElementById('Landsting').innerHTML = getOptions();
+                console.log("datarecived");
+            });
+        }
     </script>
 </body>
 

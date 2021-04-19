@@ -16,7 +16,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="../Folkmangd.json"></script>
     <script type="text/javascript" src="../heatmap.js/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
-    <script type="text/javascript" src="../Matning/MatningVerktyg.js"></script>
 
 </head>
 
@@ -51,8 +50,8 @@
                <select class="OptionMainDropdown" onchange="selectedYear = this.value" name="LandYear" id="LandYear">
 
                 </select>
-                <button id="hamtaData" onclick="getData(staticUrl[selectedDataset]);">Hämta data</button>
-                <button id="renderHeatMap" onclick="changeHeatMapData();">Render heatMap</button>
+                <button onclick="getData(staticUrl[selectedDataset]);">Hämta data</button>
+                <button onclick="changeHeatMapData();">Render heatMap</button>
             </div>
         </div>
     </div>
@@ -106,6 +105,7 @@
 
         //This will add data from the json and change the map to fit according to what data you want to use
         function changeHeatMapData() {
+            console.log("hejpådog")
             var dataByYear = getDataByYear(selectedYear);
             testData.data = [];
             dataByYear[0].forEach(item => {
@@ -139,7 +139,7 @@
         //Changes the position on the map according to choosen location
         function gotoPos() {
             var location = locations.filter(location => location.id == selectedID)[0];
-            //var year = years.filter(year => year.id == selectedYear)[0];
+            var year = years.filter(year => year.id == selectedYear)[0];
             map.panTo(new L.LatLng(location.lat, location.lng));
         }
 

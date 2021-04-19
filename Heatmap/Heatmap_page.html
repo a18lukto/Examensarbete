@@ -14,10 +14,9 @@
     <script type="text/javascript" src="../lib/leaflet/leaflet.js"></script>
     <script type="text/javascript" src="../heatmap.js/build/heatmap.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="Heatmap_page.js"></script>
     <script type="text/javascript" src="../Folkmangd.json"></script>
     <script type="text/javascript" src="../heatmap.js/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
-
+    <script type="text/javascript" src="../Matning/MatningVerktyg.js"></script>
 
 </head>
 
@@ -52,8 +51,8 @@
                <select class="OptionMainDropdown" onchange="selectedYear = this.value" name="LandYear" id="LandYear">
 
                 </select>
-                <button onclick="getData(staticUrl[selectedDataset]);">Hämta data</button>
-                <button onclick="changeHeatMapData();">Render heatMap</button>
+                <button id="hamtaData" onclick="getData(staticUrl[selectedDataset]);">Hämta data</button>
+                <button id="renderHeatMap" onclick="changeHeatMapData();">Render heatMap</button>
             </div>
         </div>
     </div>
@@ -96,7 +95,7 @@
         { id: "25", namn: "Norrbottens län", lat:  66.432686 , lng: 22.301443 },
         
         ];
-        var selectedDataset = "Folktathet";
+        var selectedDataset = "Folkmangd";
         var selectedID;
         var selectedYear = "2020";
         //Data used for heatmap
@@ -132,7 +131,7 @@
             var data = dataValues[0].data;
             var newData = [];
             newData.push(data.filter(function (x) {
-                return x.key[2] == ChoosenYear;
+                return x.key[0] == ChoosenYear;
             }));
             return newData;
         }

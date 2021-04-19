@@ -51,8 +51,8 @@
                <select class="OptionMainDropdown" onchange="selectedYear = this.value" name="LandYear" id="LandYear">
 
                 </select>
-                <button onclick="getData(staticUrl[selectedDataset]);">Hämta data</button>
-                <button onclick="changeHeatMapData();">Render heatMap</button>
+                <button id="hamtaData" onclick="getData(staticUrl[selectedDataset]);">Hämta data</button>
+                <button id="renderHeatMap" onclick="changeHeatMapData();">Render heatMap</button>
             </div>
         </div>
     </div>

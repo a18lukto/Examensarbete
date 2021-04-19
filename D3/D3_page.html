@@ -30,7 +30,7 @@
         <!-- First map-->
         <div class="Map">
             <p class="MapHeader">Map Location Based!</p>
-            <div id="map" style="width: 600px; height: 400px"></div>
+            <div class="MapIllustration" id="mapOneID"></div>
         </div>
         <!-- Option Menu-->
         <div class="OptionMenu">
@@ -123,7 +123,7 @@
                 });
                 }
             })
-            heatmapLayer.setData(testData);
+            
         }
 
         //Fetching data from json file which have the right year
@@ -168,103 +168,213 @@
             years.forEach(year => string += "<option value='" + year + "'>" + year + "</option>")
             return string;
         }
-        
-        
 
-        //Maplayer
-        /*var baseLayer = L.tileLayer(
-            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '...',
-            maxZoom: 18
-        }
-        );*/
-
-        //Config for the heatmap
-        /*var cfg = {
-            "radius": 0.35, // radius should be small ONLY if scaleRadius is true (or small radius is intended) | if scaleRadius is false it will be the constant radius used in pixels
-            "maxOpacity": .5,   //How se trough the heatmap should be
-            "scaleRadius": true, // scales the radius based on map zoom  
-            "useLocalExtrema": true, // if set to false the heatmap uses the global maximum for colorization | if activated: uses the data maximum within the current map boundaries | (there will always be a red spot with useLocalExtremas true)
-            latField: 'lat', // which field name in your data represents the latitude - default "lat"
-            lngField: 'lng', // which field name in your data represents the longitude - default "lng"
-            valueField: 'count' // which field name in your data represents the data value - default "value"
-        };*/
-
-        //Varibles for map creation
-        //var heatmapLayer = new HeatmapOverlay(cfg);
         var dataValues;
-
+        
         function getData(url){
-            console.log(url)
+            console.log(url,"opsie")
             $.getJSON(url).done(function(response){
+                console.log("What")
                 dataValues = JSON.parse(JSON.stringify(response));
+                console.log(dataValues);
                 document.getElementById('LandYear').innerHTML = getYearOptions(getYears());
                 document.getElementById('Landsting').innerHTML = getOptions();
                 console.log("datarecived");
+                render();
+                //console.log(jsonData, "jsondataALERT")
+                
             });
         };
-        //--------------------------------------------
-        
-        var map = L.map('map').setView([59.334415, 18.110103],4);
-        L.tileLayer(
-            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '',
-            maxZoom: 18,
-            }).addTo(map);
+        //-------------------------------------------------
+        //-------------------D3.JS-------------------------
+        let map = L.map("mapOneID").setView([20, 20], 3);
+                
+        function render() {
+            // Create a layer and get the actual map.
+            L.tileLayer(
+            "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                attribution: "D3.js",
+                maxZoom: 12,
+            }
+            // Add to the map-variable.
+            ).addTo(map);
 
-            // Initialize the SVG layer
-            var svgLayer = L.svg();
-            svgLayer.addTo(map);   
+            changeHeatMapData()
 
-            // We pick up the SVG from the map object
-            var svg = d3.select("#map").select("svg"),
-            g = svg.append("g");
-            var test = {lat: "59.334415", lng:"18.110103", count: "150000"}
-            d3.json(testData, function(collection){
-                collection.objects.forEach(function(d){
-                    d.cordinates = new L.LatLng(d.lng,d.lat)
-                })
-            })
+            L.svg().addTo(map);
+
+            d3.select("#mapOneID")
+            .select("svg")
+            .selectAll("dataPoints")
+            .data(testData.data)
+            .enter()
+            .append("circle")
             .attr("cx", function (d) {
-                return map.latLngToLayerPoint([LatLng]).x;
+                return map.latLngToLayerPoint([d.lat, d.lng]).x;
             })
             .attr("cy", function (d) {
-                return map.latLngToLayerPoint([LatLng]).y;
+                return map.latLngToLayerPoint([d.lat, d.lng]).y;
             })
+            // Add radius & style.
             .attr("r", function (d) {
-                if (d.brightness <= 50000) {
-                return "4";
-                } else if (d.brightness <= 100000) {
-                return "4.3";
-                } else if (d.brightness <= 200000) {
-                return "4.6";
-                } else if (d.brightness > 321000) {
+                if (d.count <= 100000) {
                 return "5";
-                }})
+                } else if (d.count <= 200000) {
+                return "5.5";
+                } else if (d.count <= 300000) {
+                return "6";
+                } else if (d.count > 400000) {
+                return "6.5";
+                } else if (d.count > 500000) {
+                return "7";
+                } else if (d.count > 750000) {
+                return "7.5";
+                } else if (d.count > 1000000) {
+                return "8";
+                } else if (d.count > 1500000) {
+                return "8.5";
+                }else if (d.count > 2000000) {
+                return "9";
+                }else if (d.count > 2500000) {
+                return "9.5";
+                }else if (d.count > 3000000) {
+                return "10";
+                //End of folkmangd------------------------
+                }else if (d.count <= 500) {
+                return "5.5";
+                } else if (d.count <= 1000) {
+                return "6";
+                } else if (d.count > 2000) {
+                return "6.5";
+                } else if (d.count > 3000) {
+                return "7";
+                } else if (d.count > 4000) {
+                return "7.5";
+                } else if (d.count > 5000) {
+                return "8";
+                } else if (d.count > 6000) {
+                return "8.5";
+                }else if (d.count > 8000) {
+                return "9";
+                }else if (d.count > 10000) {
+                return "9.5";
+                }else if (d.count > 12000) {
+                return "10";
+                //End of dods/ut--------------------------
+                }else if (d.count <= 20) {
+                return "5.5";
+                } else if (d.count <= 40) {
+                return "6";
+                } else if (d.count > 60) {
+                return "6.5";
+                } else if (d.count > 80) {
+                return "7";
+                } else if (d.count > 120) {
+                return "7.5";
+                } else if (d.count > 160) {
+                return "8";
+                } else if (d.count > 200) {
+                return "8.5";
+                }else if (d.count > 240) {
+                return "9";
+                }else if (d.count > 280) {
+                return "9.5";
+                }else if (d.count > 300) {
+                return "10";
+                //End of folktathet
+                }
+            })
+            // Depending on brightness, give according fill-color.
             .style("fill", function (d) {
-                if (d.brightness <= 50000) {
-                return "rgb(0,191,255)";
-                } else if (d.brightness <= 100000) {
-                return "rgb(0,255,0)";
-                } else if (d.brightness <= 200000) {
-                return "rgb(255,255,0)";
-                } else if (d.brightness > 300000) {
-                return "rgb(255,0,0)";
-            }})
+                if (d.count <= 100000) {
+                    return "rgb(255,160,122)";
+                } else if (d.count <= 200000) {
+                    return "rgb(255,160,122)";;
+                } else if (d.count <= 300000) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 400000) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 500000) {
+                    return "rgb(255,99,71)";
+                } else if (d.count > 750000) {
+                    return "rgb(255,99,71)";
+                } else if (d.count > 1000000) {
+                    return "rgb(255,99,71)";
+                } else if (d.count > 1500000) {
+                    return "rgb(255,0,0)";
+                }else if (d.count > 2000000) {
+                    return "rgb(255,0,0)";
+                }else if (d.count > 2500000) {
+                    return "rgb(255,0,0)";
+                }else if (d.count > 3000000) {
+                    return "rgb(255,0,0)";
+                //End of folkmangd------------------------
+                }else if (d.count <= 500) {
+                    return "rgb(255,160,122)";
+                } else if (d.count <= 1000) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 2000) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 3000) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 4000) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 5000) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 6000) {
+                    return "rgb(255,160,122)";
+                }else if (d.count > 8000) {
+                    return "rgb(255,160,122)";
+                }else if (d.count > 10000) {
+                    return "rgb(255,160,122)";
+                }else if (d.count > 12000) {
+                    return "rgb(255,160,122)";
+                //End of dods/ut--------------------------
+                }else if (d.count <= 20) {
+                    return "rgb(255,160,122)";
+                } else if (d.count <= 40) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 60) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 80) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 120) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 160) {
+                    return "rgb(255,160,122)";
+                } else if (d.count > 200) {
+                    return "rgb(255,160,122)";
+                }else if (d.count > 240) {
+                    return "rgb(255,160,122)";
+                }else if (d.count > 280) {
+                    return "rgb(255,160,122)";
+                }else if (d.count > 300) {
+                    return "rgb(255,160,122)";
+                //End of folktathet
+                }
+            })
             .attr("fill-opacity", 0.4);
 
-
+            // Update function to render everything and update when the map changes.
+            function Update() {
+            // Select all d3-circles
+            d3.selectAll("circle")
+                // Update the coordniates depending on pan & zoom.
+                .attr("cx", function (d) {
+                return map.latLngToLayerPoint([d.lat, d.lng]).x;
+                })
+                .attr("cy", function (d) {
+                return map.latLngToLayerPoint([d.lat, d.lng]).y;
+                });
+            }
+            // Fire "Update()" when a move has ended on the map.
+            map.on("moveend", Update);
+        }
         //--------------------------------------------
-
-        //To create and generate the first map
-       /* var map = new L.Map('mapOneID', {
-            center: new L.LatLng(60.122902, 17.750488),
-            zoom: 8,
-            layers: [baseLayer, heatmapLayer]
-        });*/
         function init(){
             getData(staticUrl.Folkmangd);
-            //render();
+            console.log(getData(staticUrl.Folkmangd), "hejsan")
             document.getElementById('Dataset').innerHTML = getDatasetOptions();
         }
 

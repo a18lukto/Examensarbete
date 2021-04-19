@@ -30,7 +30,7 @@
         <!-- First map-->
         <div class="Map">
             <p class="MapHeader">Map Location Based!</p>
-            <div class="MapIllustration" id="mapOneID"></div>
+            <div id="map" style="width: 600px; height: 400px"></div>
         </div>
         <!-- Option Menu-->
         <div class="OptionMenu">
@@ -204,100 +204,54 @@
             });
         };
         //--------------------------------------------
-        function render() {
-            // Create Map with Leaflet.js and set view & zoom.
-            
-            let usedMap = L.map("mapOneID").setView([60.122902, 17.750488], 3);
-            
-            // Create a layer and get the actual map.
-            L.tileLayer(
-            "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            {
-                attribution: "D3.js",
-                maxZoom: 12,
-            }
-            // Add to the map-variable.
-            ).addTo(usedMap);
-            // Add Leaflet-SVG to the map.
-            L.svg().addTo(usedMap);
+        
+        var map = L.map('map').setView([59.334415, 18.110103],4);
+        L.tileLayer(
+            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '',
+            maxZoom: 18,
+            }).addTo(map);
 
-            // Select element "map" and "svg".
-            d3.select("#mapOneID")
-            .select("svg")
-            // Select all elements that will be drawn.
-            .selectAll("dataPoints")
-            // Add dataset as data() parameter.
-            .data(testData)
-            // Create empty elements for the data.
-            .enter()
-            // Append new element "circle" depending on size of the dataset.
-            .append("circle")
-            // Linking coordinates from dataset to D3.js.
+            // Initialize the SVG layer
+            var svgLayer = L.svg();
+            svgLayer.addTo(map);   
+
+            // We pick up the SVG from the map object
+            var svg = d3.select("#map").select("svg"),
+            g = svg.append("g");
+            var test = {lat: "59.334415", lng:"18.110103", count: "150000"}
+            d3.json(testData, function(collection){
+                collection.objects.forEach(function(d){
+                    d.cordinates = new L.LatLng(d.lng,d.lat)
+                })
+            })
             .attr("cx", function (d) {
-                return usedMap.latLngToLayerPoint([d.lng]).x;
-                console.log(d.lat, d.lng,"i got here")
+                return map.latLngToLayerPoint([LatLng]).x;
             })
             .attr("cy", function (d) {
-                return usedMap.latLngToLayerPoint([d.lat]).y;
-                console.log(d.lat, d.lng)
+                return map.latLngToLayerPoint([LatLng]).y;
             })
-            // Add radius & style.
             .attr("r", function (d) {
-                if (d.count <= 5000) {
-                    return "2.8";
-                } else if (d.count <= 20000) {
-                    return "3.1";
-                } else if (d.count <= 750000) {
-                    return "3.4";
-                } else if (d.count <= 125000) {
-                    return "3.7";
-                } else if (d.count <= 200000) {
-                    return "4";
-                } else if (d.count > 250000) {
-                    return "4.3";
-                } else if (d.count <= 300000) {
-                    return "4.6";
-                } else if (d.count <= 400000) {
-                    return "5";
-                }
-            })
-            // Depending on brightness, give according fill-color.
+                if (d.brightness <= 50000) {
+                return "4";
+                } else if (d.brightness <= 100000) {
+                return "4.3";
+                } else if (d.brightness <= 200000) {
+                return "4.6";
+                } else if (d.brightness > 321000) {
+                return "5";
+                }})
             .style("fill", function (d) {
-                if (d.count <= 5000) {
-                    return "rgb(0,191,255)";
-                } else if (d.count <= 20000) {
-                    return "rgb(0,255,0)";
-                } else if (d.count <= 750000) {
-                    return "rgb(0,255,0)";
-                } else if (d.count <= 125000) {
-                    return "rgb(255,255,0)";
-                } else if (d.count <= 200000) {
-                    return "rgb(255,255,0)";
-                } else if (d.count > 250000) {
-                    return "rgb(255,0,0)";
-                } else if (d.count <= 300000) {
-                    return "rgb(255,0,0)";
-                } else if (d.count <= 400000) {
-                    return "rgb(255,0,0)";
-                }
-            })
+                if (d.brightness <= 50000) {
+                return "rgb(0,191,255)";
+                } else if (d.brightness <= 100000) {
+                return "rgb(0,255,0)";
+                } else if (d.brightness <= 200000) {
+                return "rgb(255,255,0)";
+                } else if (d.brightness > 300000) {
+                return "rgb(255,0,0)";
+            }})
             .attr("fill-opacity", 0.4);
-            
-            // Update function to render everything and update when the map changes.
-            function Update() {
-            // Select all d3-circles
-            d3.selectAll("circle")
-                // Update the coordniates depending on pan & zoom.
-                .attr("cx", function (d) {
-                return usedMap.latLngToLayerPoint([d.lat, d.lng]).x;
-                })
-                .attr("cy", function (d) {
-                return usedMap.latLngToLayerPoint([d.lat, d.lng]).y;
-                });
-            }
-            // Fire "Update()" when a move has ended on the map.
-            usedMap.on("moveend", Update);
-        }
 
 
         //--------------------------------------------
@@ -310,7 +264,7 @@
         });*/
         function init(){
             getData(staticUrl.Folkmangd);
-            render();
+            //render();
             document.getElementById('Dataset').innerHTML = getDatasetOptions();
         }
 

@@ -187,7 +187,7 @@
         };
         //-------------------------------------------------
         //-------------------D3.JS-------------------------
-        let map = L.map("mapOneID").setView([20, 20], 3);
+        let map = L.map("mapOneID").setView([59.334415, 18.110103], 4.5);
                 
         function render() {
             // Create a layer and get the actual map.
@@ -203,7 +203,7 @@
             changeHeatMapData()
 
             L.svg().addTo(map);
-
+            console.log(testData.data[0].count, testData.data[10])
             d3.select("#mapOneID")
             .select("svg")
             .selectAll("dataPoints")
@@ -218,143 +218,20 @@
             })
             // Add radius & style.
             .attr("r", function (d) {
-                if (d.count <= 100000) {
-                return "5";
-                } else if (d.count <= 200000) {
-                return "5.5";
-                } else if (d.count <= 300000) {
-                return "6";
-                } else if (d.count > 400000) {
-                return "6.5";
-                } else if (d.count > 500000) {
-                return "7";
-                } else if (d.count > 750000) {
-                return "7.5";
-                } else if (d.count > 1000000) {
-                return "8";
-                } else if (d.count > 1500000) {
-                return "8.5";
-                }else if (d.count > 2000000) {
-                return "9";
-                }else if (d.count > 2500000) {
-                return "9.5";
-                }else if (d.count > 3000000) {
-                return "10";
-                //End of folkmangd------------------------
-                }else if (d.count <= 500) {
-                return "5.5";
-                } else if (d.count <= 1000) {
-                return "6";
-                } else if (d.count > 2000) {
-                return "6.5";
-                } else if (d.count > 3000) {
-                return "7";
-                } else if (d.count > 4000) {
-                return "7.5";
-                } else if (d.count > 5000) {
-                return "8";
-                } else if (d.count > 6000) {
-                return "8.5";
-                }else if (d.count > 8000) {
-                return "9";
-                }else if (d.count > 10000) {
-                return "9.5";
-                }else if (d.count > 12000) {
-                return "10";
-                //End of dods/ut--------------------------
-                }else if (d.count <= 20) {
-                return "5.5";
-                } else if (d.count <= 40) {
-                return "6";
-                } else if (d.count > 60) {
-                return "6.5";
-                } else if (d.count > 80) {
-                return "7";
-                } else if (d.count > 120) {
-                return "7.5";
-                } else if (d.count > 160) {
-                return "8";
-                } else if (d.count > 200) {
-                return "8.5";
-                }else if (d.count > 240) {
-                return "9";
-                }else if (d.count > 280) {
-                return "9.5";
-                }else if (d.count > 300) {
-                return "10";
-                //End of folktathet
-                }
+                return d.count
+                
             })
             // Depending on brightness, give according fill-color.
             .style("fill", function (d) {
-                if (d.count <= 100000) {
-                    return "rgb(255,160,122)";
-                } else if (d.count <= 200000) {
-                    return "rgb(255,160,122)";;
-                } else if (d.count <= 300000) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 400000) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 500000) {
-                    return "rgb(255,99,71)";
-                } else if (d.count > 750000) {
-                    return "rgb(255,99,71)";
-                } else if (d.count > 1000000) {
-                    return "rgb(255,99,71)";
-                } else if (d.count > 1500000) {
-                    return "rgb(255,0,0)";
-                }else if (d.count > 2000000) {
-                    return "rgb(255,0,0)";
-                }else if (d.count > 2500000) {
-                    return "rgb(255,0,0)";
-                }else if (d.count > 3000000) {
-                    return "rgb(255,0,0)";
-                //End of folkmangd------------------------
-                }else if (d.count <= 500) {
-                    return "rgb(255,160,122)";
-                } else if (d.count <= 1000) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 2000) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 3000) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 4000) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 5000) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 6000) {
-                    return "rgb(255,160,122)";
-                }else if (d.count > 8000) {
-                    return "rgb(255,160,122)";
-                }else if (d.count > 10000) {
-                    return "rgb(255,160,122)";
-                }else if (d.count > 12000) {
-                    return "rgb(255,160,122)";
-                //End of dods/ut--------------------------
-                }else if (d.count <= 20) {
-                    return "rgb(255,160,122)";
-                } else if (d.count <= 40) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 60) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 80) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 120) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 160) {
-                    return "rgb(255,160,122)";
-                } else if (d.count > 200) {
-                    return "rgb(255,160,122)";
-                }else if (d.count > 240) {
-                    return "rgb(255,160,122)";
-                }else if (d.count > 280) {
-                    return "rgb(255,160,122)";
-                }else if (d.count > 300) {
-                    return "rgb(255,160,122)";
-                //End of folktathet
-                }
+                console.log(d.count)
+                return "red"
+                
             })
-            .attr("fill-opacity", 0.4);
+            .style("fill-opacity", function (d) {
+                console.log(d.count)
+                return d.count/50
+                
+            })
 
             // Update function to render everything and update when the map changes.
             function Update() {

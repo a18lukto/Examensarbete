@@ -101,7 +101,6 @@
         //------------------------------------------
         //This will add data from the json and change the map to fit according to what data you want to use
         function changeHeatMapData() {
-            console.log("hejpådog")
             var dataByYear = getDataByYear(selectedYear);
             testData.data = [];
             dataByYear[0].forEach(item => {
@@ -111,7 +110,6 @@
                 })
 
                 if(temp2.length != 0){
-                console.log(temp2)
                 testData.data.push({
                     lat: temp2[0].lat,
                     lng: temp2[0].lng,
@@ -126,7 +124,6 @@
         function getDataByYear(ChoosenYear) {
             var data = dataValues[0].data;
             var newData = [];
-            console.log(selectedDataset)
             newData.push(data.filter(function (x) {
                 return x.key[0] == ChoosenYear;
             }));
@@ -196,7 +193,6 @@
                 dataValues = JSON.parse(JSON.stringify(response));
                 document.getElementById('LandYear').innerHTML = getYearOptions(getYears());
                 document.getElementById('Landsting').innerHTML = getOptions();
-                console.log("datarecived", testData.data);
 
             });
         };
@@ -210,7 +206,6 @@
         function init(){
             getData(staticUrl.Folkmangd);
             document.getElementById('Dataset').innerHTML = getDatasetOptions();
-            console.log(heatmapLayer)
         }
         //------------------------------------------
     </script>

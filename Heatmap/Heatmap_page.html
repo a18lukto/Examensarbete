@@ -63,12 +63,7 @@
                 Skilsmassor: 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Skilsmassor.json',
                 Gifta: 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Gifta.json'
             };
-        
-        var dataValues;
-        
-
-        var years = [];
-        
+        //------------------------------------------
         // Locations data
         var locations = [
         { id: "01", namn: "Stockholms län", lat: 59.334415, lng: 18.110103 },
@@ -92,8 +87,9 @@
         { id: "23", namn: "Jämtlands län", lat: 63.353344 , lng: 14.7706175 },
         { id: "24", namn: "Västerbottens län", lat: 64.38316 , lng:  19.472322 },
         { id: "25", namn: "Norrbottens län", lat:  66.432686 , lng: 22.301443 },
-        
         ];
+        //------------------------------------------
+        var years = [];
         var selectedDataset = "Folkmangd";
         var selectedID;
         var selectedYear = "2020";
@@ -102,7 +98,7 @@
             max: 1000000,
             data: []
         };
-
+        //------------------------------------------
         //This will add data from the json and change the map to fit according to what data you want to use
         function changeHeatMapData() {
             console.log("hejpådog")
@@ -125,60 +121,61 @@
             })
             heatmapLayer.setData(testData);
         }
-
+        //------------------------------------------
         //Fetching data from json file which have the right year
         function getDataByYear(ChoosenYear) {
             var data = dataValues[0].data;
             var newData = [];
+            console.log(selectedDataset)
             newData.push(data.filter(function (x) {
                 return x.key[0] == ChoosenYear;
             }));
             return newData;
         }
-
+        //------------------------------------------
         //Changes the position on the map according to choosen location
         function gotoPos() {
             var location = locations.filter(location => location.id == selectedID)[0];
-            var year = years.filter(year => year.id == selectedYear)[0];
+            //var year = years.filter(year => year.id == selectedYear)[0];
             map.panTo(new L.LatLng(location.lat, location.lng));
         }
-
+        //------------------------------------------
         //Creating options to choose from using the locations provided in array above
         function getOptions() {
             var string = "<option value='' disabled selected hidden>Välj landsting</option>";
             locations.forEach(location => string += "<option value='" + location.id + "'>" + location.namn + "</option>")
             return string;
         }
-        
+        //------------------------------------------
         function getYears() {
             var data = dataValues[0].data;
             var myArray = data.map(item => item.key[2]);
             var unique = myArray.filter((v, i, a) => a.indexOf(v) === i);
             return unique;
         }
-
+        //------------------------------------------
         function getDatasetOptions(){
             var string = "";
             Object.keys(staticUrl).forEach(key => string += "<option value='" + key + "'>" + key + "</option>")
             return string;
         }
-
+        //------------------------------------------
         function getYearOptions(years) {
             var string = "<option value='' disabled selected hidden>Välj år</option>";
             years.forEach(year => string += "<option value='" + year + "'>" + year + "</option>")
             return string;
         }
-        
+        //------------------------------------------
         
 
         //Maplayer
         var baseLayer = L.tileLayer(
-            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '...',
             maxZoom: 18
         }
         );
-
+        //------------------------------------------
         //Config for the heatmap
         var cfg = {
             "radius": 0.35, // radius should be small ONLY if scaleRadius is true (or small radius is intended) | if scaleRadius is false it will be the constant radius used in pixels
@@ -189,32 +186,33 @@
             lngField: 'lng', // which field name in your data represents the longitude - default "lng"
             valueField: 'count' // which field name in your data represents the data value - default "value"
         };
-
+        //------------------------------------------
         //Varibles for map creation
         var heatmapLayer = new HeatmapOverlay(cfg);
         var dataValues;
-
+        //------------------------------------------
         function getData(url){
-            console.log(url)
             $.getJSON(url).done(function(response){
                 dataValues = JSON.parse(JSON.stringify(response));
                 document.getElementById('LandYear').innerHTML = getYearOptions(getYears());
                 document.getElementById('Landsting').innerHTML = getOptions();
-                console.log("datarecived");
+                console.log("datarecived", testData.data);
+
             });
         };
-
+        //------------------------------------------
         //To create and generate the first map
         var map = new L.Map('mapOneID', {
-            center: new L.LatLng(60.122902, 17.750488),
+            center: new L.LatLng(59.334415, 18.110103),
             zoom: 8,
             layers: [baseLayer, heatmapLayer]
         });
         function init(){
             getData(staticUrl.Folkmangd);
             document.getElementById('Dataset').innerHTML = getDatasetOptions();
+            console.log(heatmapLayer)
         }
-
+        //------------------------------------------
     </script>
 </body>
 

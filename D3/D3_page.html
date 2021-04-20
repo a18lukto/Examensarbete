@@ -190,6 +190,7 @@
         let map = L.map("mapOneID").setView([59.334415, 18.110103], 4.5);
                 
         function render() {
+            
             // Create a layer and get the actual map.
             L.tileLayer(
             "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -203,6 +204,7 @@
             changeHeatMapData()
 
             L.svg().addTo(map);
+            
             d3.select("#mapOneID")
             .select("svg")
             .selectAll("dataPoints")

@@ -12,8 +12,8 @@
     <script type="text/javascript" src="../lib/leaflet/leaflet.js"></script>
     <script type="text/javascript" src="../heatmap.js/build/heatmap.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="../Folkmangd.json"></script>
     <script type="text/javascript" src="../heatmap.js/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
+    <script type="text/javascript" src="../MessureTools/script.js"></script>
 
 </head>
 <body onload="init()">
@@ -40,9 +40,9 @@
                 <!--Year dropdown-->
                 <select class="OptionMainDropdown" onchange="selectedYear = this.value" name="LandYear" id="LandYear"> </select>
                 <!--Get dataset button-->
-                <button onclick="getData(staticUrl[selectedDataset]);">Hämta data</button>
+                <button id="hamtaData" onclick="getData(staticUrl[selectedDataset]);">Hämta data</button>
                 <!--Render heatmap button-->
-                <button onclick="changeHeatMapData();">Render heatMap</button>
+                <button id="renderMap" onclick="changeHeatMapData();">Render heatMap</button>
             </div>
         </div>
     </div>
@@ -82,9 +82,10 @@
         ];
         //------------------------------------------
         var years = [];
+        var emptyTemp = [];
         var selectedDataset = "Folkmangd";
         var selectedID;
-        var selectedYear = "2020";
+        var selectedYear = 2020;
         var testData = {
             max: 1000000,
             data: []
@@ -144,14 +145,14 @@
         //
         function getDatasetOptions(){
             var string = "";                                                                                        //
-            Object.keys(staticUrl).forEach(key => string += "<option value='" + key + "'>" + key + "</option>")     //
+            Object.keys(staticUrl).forEach(key => string += "<option id='datasetid' value='" + key + "'>" + key + "</option>")     //
             return string;                                                                                          //
         }
         //------------------------------------------
         //
         function getYearOptions(years) {
             var string = "<option value='' disabled selected hidden>Välj år</option>";                  //
-            years.forEach(year => string += "<option value='" + year + "'>" + year + "</option>")       //
+            years.forEach(year => string += "<option id='yearid' value='" + year + "'>" + year + "</option>")       //
             return string;                                                                              //
         }
         //------------------------------------------
@@ -189,7 +190,7 @@
         //To create and generate the first map
         var map = new L.Map('mapOneID', {
             center: new L.LatLng(59.334415, 18.110103),     //
-            zoom: 8,                                        //
+            zoom: 6,                                        //
             layers: [baseLayer, heatmapLayer]               //
         });
         //------------------------------------------

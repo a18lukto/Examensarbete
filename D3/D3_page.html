@@ -17,17 +17,13 @@
     <script type="text/javascript" src="../heatmap.js/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+    <script type="text/javascript" src="../MessureTools/script.js"></script>
 
 </head>
 
 <body onload="init()">
-    <httpProtocol>
-        <customHeaders>
-            <add name="Access-Control-Allow-Origin" value="*" />
-        </customHeaders>
-    </httpProtocol>
     <div id="Main">
-        <!-- First map-->
+        <!--map-->
         <div class="Map">
             <p class="MapHeader">Map Location Based!</p>
             <div class="MapIllustration" id="mapOneID"></div>
@@ -35,42 +31,37 @@
         <!-- Option Menu-->
         <div class="OptionMenu">
             <p class="OptionHeader" id="testid">Option Menu</p>
-            <!--Folkmangd button-->
             <div class="OptionButton">
                 <p class="OptionButtonHeader">Goto Location</p>
+                <!--Go to place button-->
                 <select class="OptionMainDropdown" onchange="selectedID = this.value" name="Landsting" id="Landsting">
-
                 </select>
                 <button onclick="gotoPos();">Goto</button>
             </div>
             <div class="OptionButton">
                 <p class="OptionButtonHeader">Goto Location</p>
-                <select class="OptionMainDropdown" onchange="selectedDataset = this.value" name="Dataset" id="Dataset">
-
-                </select>
-               <select class="OptionMainDropdown" onchange="selectedYear = this.value" name="LandYear" id="LandYear">
-
-                </select>
+                <!--Dataset dropdown-->
+                <select class="OptionMainDropdown" onchange="selectedDataset = this.value" name="Dataset" id="Dataset"> </select>
+                <!--Year dropdown-->
+                <select class="OptionMainDropdown" onchange="selectedYear = this.value" name="LandYear" id="LandYear"> </select>
+                <!--Get dataset button-->
                 <button id="hamtaData" onclick="getData(staticUrl[selectedDataset]);">Hämta data</button>
-                <button id="renderHeatMap" onclick="changeHeatMapData();">Render heatMap</button>
+                <!--Render heatmap button-->
+                <button id="renderMap" onclick="render();">Render heatMap</button>
             </div>
         </div>
     </div>
     <script>
 
-        //Getting the json file and doing it useable
+        //Links to JSON Files
         var staticUrl = {Folkmangd:'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Dataset/Folkmangd.json',
                 Folktathet: 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Dataset/Folktathet.json',
                 Skilsmassor: 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Dataset/Skilsmassor.json',
                 Gifta: 'https://raw.githubusercontent.com/a18lukto/Examensarbete/main/Dataset/Gifta.json'
             };
-        
-        var dataValues;
-        
-
-        var years = [];
-        
-        // Locations data
+        //------------------------------------------
+        // Locations data connecting id from JSON file to the accurate coordinates
+        //ID = the same id as in the JSON files | Namn = What name will be shown in the dropdown menu | lat = The latitued coordinate | lng = The Longitude coordinate
         var locations = [
         { id: "01", namn: "Stockholms län", lat: 59.334415, lng: 18.110103 },
         { id: "03", namn: "Uppsala län", lat: 60.122902, lng: 17.750488 },
@@ -93,96 +84,89 @@
         { id: "23", namn: "Jämtlands län", lat: 63.353344 , lng: 14.7706175 },
         { id: "24", namn: "Västerbottens län", lat: 64.38316 , lng:  19.472322 },
         { id: "25", namn: "Norrbottens län", lat:  66.432686 , lng: 22.301443 },
-        
         ];
-        var selectedDataset = "Folktathet";
+        //------------------------------------------
+        var years = [];
+        var emptyTemp = [];
+        var selectedDataset = "Folkmassa";
         var selectedID;
-        var selectedYear = "2020";
-        //Data used for heatmap
+        var selectedYear = 2020;
         var testData = {
             max: 1000000,
             data: []
         };
-
+        //------------------------------------------
         //This will add data from the json and change the map to fit according to what data you want to use
         function changeHeatMapData() {
-            var dataByYear = getDataByYear(selectedYear);
+            var dataByYear = getDataByYear(selectedYear);       //Get data according to selected year | Deafault year is 2020
             testData.data = [];
-            dataByYear[0].forEach(item => {
-                var temp2 = [];
-                var temp2 = locations.filter(location => {
+            dataByYear[0].forEach(item => {                     //For each item fetch from that year do the following
+                var tempData = [];                              //Creating a temporary array to put the data fetch from the json file
+                var tempData = locations.filter(location => {   //Filter out each location and matching the JSON file id number to location array to get coordinates
                     return item.key[0] == location.id;
                 })
-
-                if(temp2.length != 0){
-                console.log(temp2)
-                testData.data.push({
-                    lat: temp2[0].lat,
-                    lng: temp2[0].lng,
-                    count: (item.values[0]/100000)
+                if(tempData.length != 0){
+                testData.data.push({                            //Pushing in the coordinates and value in the right order from booth the JSON file and the location that have been matched from the JSON file
+                    lat: tempData[0].lat,                       //Adding lat coordinate
+                    lng: tempData[0].lng,                       //Adding lng coordinate
+                    count: (item.values[0]/100000)              //Adding value and dividing the id with 100000 to avoid big numbers for the heatmap libary
                 });
                 }
             })
-            
         }
-
-        //Fetching data from json file which have the right year
+        //------------------------------------------------------
+        //Fetching data from json file which have the selected year from getYears()
         function getDataByYear(ChoosenYear) {
-            var data = dataValues[0].data;
-            var newData = [];
-            newData.push(data.filter(function (x) {
-                return x.key[2] == ChoosenYear;
+            var data = dataValues[0].data;                      //All data from datavalues[0].data is transferd to a varible
+            var newData = [];                                   //Creating a temporary arry to add data in and transfer it
+            newData.push(data.filter(function (x) {             //Filter out the spesific data we need
+                return x.key[2] == ChoosenYear;                 //Fetch all keys from the JSON file that have the same year
             }));
-            return newData;
+            return newData;                                     //Send back all values fetch from choosen year
         }
-
+        //------------------------------------------
         //Changes the position on the map according to choosen location
         function gotoPos() {
-            var location = locations.filter(location => location.id == selectedID)[0];
-            //var year = years.filter(year => year.id == selectedYear)[0];
-            map.panTo(new L.LatLng(location.lat, location.lng));
+            var location = locations.filter(location => location.id == selectedID)[0];      //Filter out the location that have the same id as choosen location
+            map.panTo(new L.LatLng(location.lat, location.lng));                            //Using the coordinates from the choosen location to transfer the camera to new position
         }
-
+        //------------------------------------------
         //Creating options to choose from using the locations provided in array above
         function getOptions() {
-            var string = "<option value='' disabled selected hidden>Välj landsting</option>";
-            locations.forEach(location => string += "<option value='" + location.id + "'>" + location.namn + "</option>")
-            return string;
+            var string = "<option value='' disabled selected hidden>Välj landsting</option>";                               //What will be seen in an unused dropdown menu
+            locations.forEach(location => string += "<option value='" + location.id + "'>" + location.namn + "</option>")   //For each location add an new select in the dropdown menu for use
+            return string;                                                                                                  //Send all new slections to the dropdown menu
         }
-        
+        //------------------------------------------
+        //Getting the year from the JSON file
         function getYears() {
-            var data = dataValues[0].data;
-            var myArray = data.map(item => item.key[2]);
-            var unique = myArray.filter((v, i, a) => a.indexOf(v) === i);
-            return unique;
+            var data = dataValues[0].data;                                  //All data from datavalues[0].data is transferd to a varible
+            var myArray = data.map(item => item.key[2]);                    //
+            var unique = myArray.filter((v, i, a) => a.indexOf(v) === i);   //
+            return unique;                                                  //
         }
-
+        //------------------------------------------
+        //
         function getDatasetOptions(){
-            var string = "";
-            Object.keys(staticUrl).forEach(key => string += "<option value='" + key + "'>" + key + "</option>")
-            return string;
+            var string = "";                                                                                        //
+            Object.keys(staticUrl).forEach(key => string += "<option id='datasetid' value='" + key + "'>" + key + "</option>")     //
+            return string;                                                                                          //
         }
-
+        //------------------------------------------
+        //
         function getYearOptions(years) {
-            var string = "<option value='' disabled selected hidden>Välj år</option>";
-            years.forEach(year => string += "<option value='" + year + "'>" + year + "</option>")
-            return string;
+            var string = "<option value='' disabled selected hidden>Välj år</option>";                  //
+            years.forEach(year => string += "<option id='yearid' value='" + year + "'>" + year + "</option>")       //
+            return string;                                                                              //
         }
-
+        //----------------------------------------------
         var dataValues;
-        
         function getData(url){
-            console.log(url,"opsie")
             $.getJSON(url).done(function(response){
-                console.log("What")
                 dataValues = JSON.parse(JSON.stringify(response));
-                console.log(dataValues);
                 document.getElementById('LandYear').innerHTML = getYearOptions(getYears());
                 document.getElementById('Landsting').innerHTML = getOptions();
-                console.log("datarecived");
-                render();
-                //console.log(jsonData, "jsondataALERT")
-                
+                //render();
             });
         };
         //-------------------------------------------------
@@ -190,7 +174,8 @@
         let map = L.map("mapOneID").setView([59.334415, 18.110103], 4.5);
                 
         function render() {
-            
+            d3.select("svg").remove();
+            console
             // Create a layer and get the actual map.
             L.tileLayer(
             "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -205,6 +190,8 @@
 
             L.svg().addTo(map);
             
+            
+
             d3.select("#mapOneID")
             .select("svg")
             .selectAll("dataPoints")
@@ -224,13 +211,11 @@
             })
             // Depending on brightness, give according fill-color.
             .style("fill", function (d) {
-                console.log(d.count)
                 return "red"
                 
             })
             .style("fill-opacity", function (d) {
-                console.log(d.count)
-                return d.count/50
+                return d.count / 100
                 
             })
 
@@ -252,7 +237,6 @@
         //--------------------------------------------
         function init(){
             getData(staticUrl.Folkmangd);
-            console.log(getData(staticUrl.Folkmangd), "hejsan")
             document.getElementById('Dataset').innerHTML = getDatasetOptions();
         }
 

@@ -5,16 +5,10 @@ var counter = parseInt(localStorage.getItem("TimerCounter", 0));
 function startUp() {
      /* Om det är första gången det startas sätts start värdet till 0 och med,
      ett ',' efter för tydlighet. */
-    if (localStorage.getItem("Loaded page") == null) {
-        localStorage.setItem("Loaded page", 0 + " \n");
-    }
-    // Om countern är null sätts den till 0. 
-    if (localStorage.getItem("TimerCounter") == null) {
-        localStorage.setItem("TimerCounter", 0) + " \n";
-    }
     // Ser till att den itereras endast 5 gånger.
-    for (i =0; i < 500; i++)   {
+    for (i =0; i < 10; i++)   {
         //delta = 0;
+        localStorage.setItem("Loaded page", 0 + " \n");
         var endTime = new Date().getTime();
         var theTime = endTime - startTime;
         endTime = localStorage.setItem("Time", JSON.stringify(theTime)); 

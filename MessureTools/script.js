@@ -2,12 +2,8 @@
 //----------------Time saver---------------------
 var startTime = new Date().getTime();
 var counter = parseInt(localStorage.getItem("TimerCounter", 0));
-function startUp() {
-     /* Om det är första gången det startas sätts start värdet till 0 och med,
-     ett ',' efter för tydlighet. */
-    // Ser till att den itereras endast 5 gånger.
+function startMessure() {
     for (i =0; i < 10; i++)   {
-        //delta = 0;
         localStorage.setItem("Loaded page", 0 + " \n");
         var endTime = new Date().getTime();
         var theTime = endTime - startTime;
@@ -19,7 +15,6 @@ function startUp() {
         var measureDiff = theTime;
         console.log(theTime)
         delta += measureDiff + "\n";
-
         localStorage.setItem("Loaded page", delta);
     }
 }
@@ -28,8 +23,6 @@ function startUp() {
 
  function buttonClick() {
     selectedYear = 1968
-    //selectedDataset = "folktathet"
-    //Klickar på knappen med id logo
     var clickEvent = new MouseEvent('click', {
         view: window,
         bubbles: true,
@@ -41,7 +34,7 @@ function startUp() {
                 for(var x = 0;x < 52; x++){ 
                     let donePageLoading = document.readyState;
                     document.getElementById("LandYear")[x].dispatchEvent(clickEvent)
-                        console.log(document.getElementById("LandYear")[x])             // Click hamtaData button
+                        console.log(document.getElementById("LandYear")[x])             
                         document.getElementById("renderMap").dispatchEvent(clickEvent)
                         selectedYear++
                         console.log(selectedYear)
